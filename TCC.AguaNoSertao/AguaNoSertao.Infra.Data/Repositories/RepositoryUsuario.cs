@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AguaNoSertao.Domain.Entities
+namespace AguaNoSertao.Infra.Data.Repositories
 {
-    public class BaseEntities
+    public class RepositoryUsuario
     {
-        public int Id { get; set; }
+
     }
 }

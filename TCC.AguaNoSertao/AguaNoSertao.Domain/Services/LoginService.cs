@@ -1,5 +1,6 @@
 ﻿using AguaNoSertao.Domain.DTO;
 using AguaNoSertao.Domain.Entities;
+using AguaNoSertao.Domain.Interfaces.Repositorys;
 using AutoMapper;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -11,10 +12,12 @@ namespace AguaNoSertao.Domain.Services
     public class LoginService
     {
         private readonly IMapper mapper;
+        private readonly IRepositoryLogin _repositoryLogin;
 
-        public LoginService(IMapper mapper)
+        public LoginService(IMapper mapper, IRepositoryLogin repositoryLogin)
         {
             this.mapper = mapper;
+            _repositoryLogin = repositoryLogin;
         }
 
         public string ObterToken(LoginDTO login, string key)
@@ -29,6 +32,8 @@ namespace AguaNoSertao.Domain.Services
                 throw new ArgumentException("É necessário informar a senha.");
 
             var loginMapper = mapper.Map<Login>(login);
+
+            var buscaLogin = _repositoryLogin.ConsultarLogin(loginMapper.Email, loginMapper.Senha);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
