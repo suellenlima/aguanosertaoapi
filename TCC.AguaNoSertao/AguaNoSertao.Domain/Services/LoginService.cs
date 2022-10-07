@@ -1,54 +1,78 @@
 ﻿using AguaNoSertao.Domain.DTO;
 using AguaNoSertao.Domain.Entities;
+using AguaNoSertao.Domain.Helpers;
 using AguaNoSertao.Domain.Interfaces.Repositorys;
 using AutoMapper;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+
 
 namespace AguaNoSertao.Domain.Services
 {
     public class LoginService
     {
-        private readonly IMapper mapper;
+        private readonly IMapper _mapper;
         private readonly IRepositoryLogin _repositoryLogin;
 
         public LoginService(IMapper mapper, IRepositoryLogin repositoryLogin)
         {
-            this.mapper = mapper;
+            _mapper = mapper;
             _repositoryLogin = repositoryLogin;
         }
 
-        public string ObterToken(LoginDTO login, string key)
+        public void CadastrarLogin(LoginDTO login)
         {
-            if (login == null)
-                throw new ArgumentNullException("É necessário informar email e senha.");
-
             if (string.IsNullOrEmpty(login.Email))
-                throw new ArgumentException("É necessário informar o email.");
+                throw new ArgumentException("É necessário informar o e-mail.");
+
+            if (!Util.ValidarEmail(login.Email))
+                throw new ArgumentException("O e-mail informado não é valido.");
 
             if (string.IsNullOrEmpty(login.Senha))
                 throw new ArgumentException("É necessário informar a senha.");
 
-            var loginMapper = mapper.Map<Login>(login);
+            if (login.Senha.Length < 6)
+                throw new ArgumentException("A senha deve ter no mínimo 6 caracteres.");
+
+            var loginMapper = _mapper.Map<Login>(login);
+
+            var buscaLogin = _repositoryLogin.ConsultarEmailLogin(loginMapper.Email);
+
+            if (buscaLogin != null)
+                throw new ArgumentException("Este usuário, já está cadastrado no sistema. Solicite a recuperação de senha.");
+
+            Login novoLogin = new()
+            {
+                Email = login.Email,
+                Senha = login.Senha,
+                IsDisponivel = true, //TODO ENQUANTO NÃO FOI DESENVOLVIDO A INTEGRATION, O USUARIO ESTA ATIVO AUTOMATICAMENTE.
+                Usuario = new Usuario
+                {
+                    Email = login.Email
+                }
+            };
+
+            _repositoryLogin.Add(novoLogin);
+
+        }
+
+        public Login Logar(LoginDTO login)
+        {
+            if (string.IsNullOrEmpty(login.Email))
+                throw new ArgumentException("É necessário informar o e-mail.");
+
+            if (string.IsNullOrEmpty(login.Senha))
+                throw new ArgumentException("É necessário informar a senha.");
+
+            var loginMapper = _mapper.Map<Login>(login);
 
             var buscaLogin = _repositoryLogin.ConsultarLogin(loginMapper.Email, loginMapper.Senha);
 
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new[]
-                {
-                    new Claim("Id", Guid.NewGuid().ToString()),
-                }),
-                Expires = DateTime.UtcNow.AddDays(1),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key)), SecurityAlgorithms.HmacSha512Signature)
-            };
+            if (buscaLogin == null)
+                throw new ArgumentException("O usuário/senha inválido.");
 
-            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-            SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
+            if (!buscaLogin.IsDisponivel)
+                throw new ArgumentException("O usuário não está ativado. Por favor, ative o usuário no link informado no e-mail, ou solicite o reenvio da ativação.");
 
-            return tokenHandler.WriteToken(token);
+            return buscaLogin;
         }
     }
 }

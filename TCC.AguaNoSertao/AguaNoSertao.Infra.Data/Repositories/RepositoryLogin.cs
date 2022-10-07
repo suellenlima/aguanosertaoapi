@@ -19,5 +19,12 @@ namespace AguaNoSertao.Infra.Data.Repositories
 
             return login;
         }
+
+        public Login ConsultarEmailLogin(string email)
+        {
+            var login = _sqlContext.Logins.Where(e => e.Email == email).FirstOrDefault();
+
+            return login;
+        }
     }
 }
