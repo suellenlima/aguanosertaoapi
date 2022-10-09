@@ -8,7 +8,7 @@ env:
   AZURE_WEBAPP_PACKAGE_PATH: AguaNoSertao.API\publish
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 6.0.x
-  WORKING_DIRECTORY: AguaNoSertao.API
+  WORKING_DIRECTORY: TCC.AguaNoSertao\AguaNoSertao.API
 jobs:
   build:
     runs-on: windows-latest
