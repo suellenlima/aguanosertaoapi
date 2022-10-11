@@ -4,17 +4,14 @@ using AguaNoSertao.Domain.Helpers;
 using AguaNoSertao.Domain.Interfaces.Repositorys;
 using AutoMapper;
 
-
 namespace AguaNoSertao.Domain.Services
 {
-    public class LoginService
+    public class LoginService : BaseService
     {
-        private readonly IMapper _mapper;
-        private readonly IRepositoryLogin _repositoryLogin;
+        private readonly ILoginRepository _repositoryLogin;
 
-        public LoginService(IMapper mapper, IRepositoryLogin repositoryLogin)
+        public LoginService(ILoginRepository repositoryLogin, IMapper mapper) : base (mapper)
         {
-            _mapper = mapper;
             _repositoryLogin = repositoryLogin;
         }
 
@@ -32,7 +29,7 @@ namespace AguaNoSertao.Domain.Services
             if (login.Senha.Length < 6)
                 throw new ArgumentException("A senha deve ter no mínimo 6 caracteres.");
 
-            var loginMapper = _mapper.Map<Login>(login);
+            var loginMapper = Mapper.Map<Login>(login);
 
             var buscaLogin = _repositoryLogin.ConsultarEmailLogin(loginMapper.Email);
 
@@ -54,7 +51,7 @@ namespace AguaNoSertao.Domain.Services
 
         }
 
-        public Login Logar(LoginDTO login)
+        public int Logar(LoginDTO login)
         {
             if (string.IsNullOrEmpty(login.Email))
                 throw new ArgumentException("É necessário informar o e-mail.");
@@ -62,7 +59,7 @@ namespace AguaNoSertao.Domain.Services
             if (string.IsNullOrEmpty(login.Senha))
                 throw new ArgumentException("É necessário informar a senha.");
 
-            var loginMapper = _mapper.Map<Login>(login);
+            var loginMapper = Mapper.Map<Login>(login);
 
             var buscaLogin = _repositoryLogin.ConsultarLogin(loginMapper.Email, loginMapper.Senha);
 
@@ -72,7 +69,7 @@ namespace AguaNoSertao.Domain.Services
             if (!buscaLogin.IsDisponivel)
                 throw new ArgumentException("O usuário não está ativado. Por favor, ative o usuário no link informado no e-mail, ou solicite o reenvio da ativação.");
 
-            return buscaLogin;
+            return buscaLogin.Id;
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AguaNoSertao.Infra.Data.Repositories
 {
-    public class RepositoryUsuario
+    public class UsuarioRepository
     {
 
     }

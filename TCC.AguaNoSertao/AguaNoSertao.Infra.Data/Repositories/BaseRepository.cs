@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace AguaNoSertao.Infra.Data.Repositories
 {
-    public class RepositoryBase<TEntity> : IRepositoryBase<TEntity> where TEntity : class
+    public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class
     {
         private readonly SqlContext _sqlContext;
 
-        public RepositoryBase(SqlContext sqlContext)
+        public BaseRepository(SqlContext sqlContext)
         {
             this._sqlContext = sqlContext;
         }

@@ -4,11 +4,11 @@ using System.Reflection.Metadata.Ecma335;
 
 namespace AguaNoSertao.Infra.Data.Repositories
 {
-    public class RepositoryLogin : RepositoryBase<Login>, IRepositoryLogin
+    public class LoginRepository : BaseRepository<Login>, ILoginRepository
     {
         private readonly SqlContext _sqlContext;
 
-        public RepositoryLogin(SqlContext sqlContext) : base(sqlContext)
+        public LoginRepository(SqlContext sqlContext) : base(sqlContext)
         {
             _sqlContext = sqlContext;
         }

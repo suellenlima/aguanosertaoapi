@@ -35,13 +35,13 @@ namespace AguaNoSertao.API
             return services;
         }
 
-        public static string CreateToken(this Login result)
+        public static string CreateToken(this int result)
         {
             SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[]
                 {
-                    new Claim("id-login", result.Id.ToString()),
+                    new Claim("id-login", result.ToString()),
                 }),
                 Expires = DateTime.UtcNow.AddDays(1),
                 SigningCredentials = new SigningCredentials(_symmetricSecurityKey, SecurityAlgorithms.HmacSha512Signature)

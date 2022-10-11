@@ -14,7 +14,5 @@ namespace AguaNoSertao.Domain.Mappers
             .ForMember(dest => dest.Senha, opt => opt.MapFrom(x => x.Senha))
             .ForMember(dest => dest.IsDisponivel, opt => opt.Ignore());
         }
-
-
     }
 }

@@ -69,5 +69,12 @@ namespace AguaNoSertao.Domain.Helpers
                 return false;
             }
         }
+        public static string ExtrairNumeros(string numeros)
+        {
+            if (string.IsNullOrEmpty(numeros))
+                return numeros;
+
+            return string.Join("", Regex.Split(numeros, @"[^\d]"));
+        }
     }
 }

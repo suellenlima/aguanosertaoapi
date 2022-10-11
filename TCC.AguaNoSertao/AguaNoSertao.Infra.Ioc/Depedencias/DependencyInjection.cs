@@ -14,7 +14,8 @@ namespace AguaNoSertao.Infra.Ioc.Depedencias
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<SqlContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnectionStrings")));
-            services.AddTransient<IRepositoryLogin, RepositoryLogin>();
+            services.AddTransient<ILoginRepository, LoginRepository>();
+            services.AddTransient<IContatoFormRepository, ContatoFormRepository>();
 
             return services;
         }
@@ -23,6 +24,8 @@ namespace AguaNoSertao.Infra.Ioc.Depedencias
         {
             services.AddAutoMapper(typeof(DtoToModelMapping));
             services.AddScoped<LoginService>();
+            services.AddScoped<CadastroService>();
+            services.AddScoped<ContatoService>();
 
             return services;
         }
