@@ -3,6 +3,7 @@ using AguaNoSertao.Domain.Entities;
 using AguaNoSertao.Domain.Helpers;
 using AguaNoSertao.Domain.Interfaces.Repositorys;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace AguaNoSertao.Domain.Services
     {
         private readonly IContatoFormRepository _contatoFormRepository;
 
-        public ContatoService(IMapper mapper, IContatoFormRepository contatoFormRepository) : base(mapper)
+        public ContatoService(IMapper mapper, IContatoFormRepository contatoFormRepository, IHttpContextAccessor httpContextAcessor) : base(mapper, httpContextAcessor)
         {
             _contatoFormRepository = contatoFormRepository;
         }
@@ -27,6 +28,9 @@ namespace AguaNoSertao.Domain.Services
 
             if (string.IsNullOrEmpty(contato.Email))
                 throw new ArgumentException("É necessário informar o e-mail.");
+
+            if (!Util.ValidarEmail(contato.Email))
+                throw new ArgumentException("O e-mail informado não é valido.");
 
             if (string.IsNullOrEmpty(contato.Mensagem))
                 throw new ArgumentException("É necessário informar a mensagem.");

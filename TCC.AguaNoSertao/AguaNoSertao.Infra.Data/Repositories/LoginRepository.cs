@@ -1,5 +1,6 @@
 ﻿using AguaNoSertao.Domain.Entities;
 using AguaNoSertao.Domain.Interfaces.Repositorys;
+using Microsoft.EntityFrameworkCore;
 using System.Reflection.Metadata.Ecma335;
 
 namespace AguaNoSertao.Infra.Data.Repositories
@@ -15,7 +16,7 @@ namespace AguaNoSertao.Infra.Data.Repositories
 
         public Login ConsultarLogin(string email, string senha)
         {
-            var login = _sqlContext.Logins.Where(e => e.Email == email && e.Senha == senha).FirstOrDefault();
+            var login = _sqlContext.Logins.Include(e => e.Usuario).ThenInclude(e => e.Endereco).Where(e => e.Email == email && e.Senha == senha).FirstOrDefault();
 
             return login;
         }
