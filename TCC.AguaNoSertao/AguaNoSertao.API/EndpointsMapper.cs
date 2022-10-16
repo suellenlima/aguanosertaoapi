@@ -9,6 +9,7 @@ namespace AguaNoSertao.API
         {
             app.MapPost("/login", (LoginService service, LoginDTO obj) => service.Logar(obj).CreateToken()).AllowAnonymous();
             app.MapPost("/login/cadastro", (LoginService service, LoginDTO obj) => service.CadastrarLogin(obj)).AllowAnonymous();
+            app.MapPost("/login/alterarsenha", (LoginService service, AlterarSenha obj) => service.AlterarSenha(obj)).RequireAuthorization();
 
             app.MapPost("/contato/form", (ContatoService service, ContatoFormDTO obj) => service.CadastrarFormularioContato(obj)).RequireAuthorization();
 

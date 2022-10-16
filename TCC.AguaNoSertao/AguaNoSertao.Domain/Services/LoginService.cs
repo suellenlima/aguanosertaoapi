@@ -83,5 +83,26 @@ namespace AguaNoSertao.Domain.Services
 
             return usuarioIds;
         }
+
+        public void AlterarSenha(AlterarSenha alterarSenha)
+        {
+            if (string.IsNullOrEmpty(alterarSenha.SenhaAntiga))
+                throw new ArgumentException("É necessário informar a senha atual.");
+
+            if (string.IsNullOrEmpty(alterarSenha.SenhaNova))
+                throw new ArgumentException("É necessário informar a nova senha.");
+
+            if (alterarSenha.SenhaNova.Length < 6)
+                throw new ArgumentException("A senha nova deve ter no mínimo 6 caracteres.");
+
+            var login = _repositoryLogin.GetById(IdLogin);
+
+            if (login.Senha != alterarSenha.SenhaAntiga)
+                throw new ArgumentException("Senha inválida.");
+
+            login.Senha = alterarSenha.SenhaNova;
+
+            _repositoryLogin.Update(login);
+        }
     }
 }
