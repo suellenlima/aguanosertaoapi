@@ -16,6 +16,15 @@ namespace AguaNoSertao.Domain.Services
             _usuarioRepository = usuarioRepository;
         }
 
+        public PerfilDTO ConsultarUsuario()
+        {
+            var usuario = _usuarioRepository.ConsultarUsuario(IdUsuario);
+
+            var perfilDto = Mapper.Map<PerfilDTO>(usuario);
+
+            return perfilDto;
+        }
+
         public void UpdateUsuario(PerfilDTO perfilDTO)
         {
             if (!string.IsNullOrEmpty(perfilDTO.Email))

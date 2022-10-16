@@ -12,7 +12,8 @@ namespace AguaNoSertao.API
 
             app.MapPost("/contato/form", (ContatoService service, ContatoFormDTO obj) => service.CadastrarFormularioContato(obj)).RequireAuthorization();
 
-            app.MapPut("/usuario", (UsuarioService service, PerfilDTO obj) => service.UpdateUsuario(obj)).RequireAuthorization();
+            app.MapGet("/perfil", (UsuarioService service) => service.ConsultarUsuario()).RequireAuthorization();
+            app.MapPut("/perfil", (UsuarioService service, PerfilDTO obj) => service.UpdateUsuario(obj)).RequireAuthorization();
 
             return app;
         }
