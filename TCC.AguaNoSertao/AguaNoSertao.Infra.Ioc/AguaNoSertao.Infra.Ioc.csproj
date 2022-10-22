@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AguaNoSertao.Infra.Data\AguaNoSertao.Infra.Data.csproj" />
+    <ProjectReference Include="..\AguaNoSertao.Infra.Integration\AguaNoSertao.Infra.Integration.csproj" />
   </ItemGroup>
 
 </Project>

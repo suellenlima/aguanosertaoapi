@@ -21,9 +21,16 @@ namespace AguaNoSertao.Infra.Data.Repositories
             return login;
         }
 
-        public Login ConsultarEmailLogin(string email)
+        public Login ConsultarLoginPeloEmail(string email)
         {
-            var login = _sqlContext.Logins.Where(e => e.Email == email).FirstOrDefault();
+            var login = _sqlContext.Logins.Include(e => e.Usuario).Where(e => e.Email == email).FirstOrDefault();
+
+            return login;
+        }
+
+        public Login ConsultarLoginPelaGuidVerificacao(string guidVerificacao)
+        {
+            var login = _sqlContext.Logins.Include(e => e.Usuario).Where(e => e.GuidVerificacao == guidVerificacao).FirstOrDefault();
 
             return login;
         }

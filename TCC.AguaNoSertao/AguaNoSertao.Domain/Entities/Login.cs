@@ -6,6 +6,7 @@
         public string Senha { get; set; }
         public DateTime DataCadastro { get; set; }
         public bool IsDisponivel { get; set; }
+        public string? GuidVerificacao { get; set; } 
         public Usuario Usuario { get; set; }
     }
 }

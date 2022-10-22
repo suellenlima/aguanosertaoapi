@@ -4,7 +4,8 @@ namespace AguaNoSertao.Domain.Interfaces.Repositorys
 {
     public interface ILoginRepository : IBaseRepository<Login>
     {
-        Login ConsultarEmailLogin(string email);
+        Login ConsultarLoginPeloEmail(string email);
         Login ConsultarLogin(string email, string senha);
+        Login ConsultarLoginPelaGuidVerificacao(string guidVerificacao);
     }
 }
