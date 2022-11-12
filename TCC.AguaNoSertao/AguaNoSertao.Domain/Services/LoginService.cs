@@ -115,6 +115,9 @@ namespace AguaNoSertao.Domain.Services
             if (string.IsNullOrEmpty(obj.NovaSenha))
                 throw new ArgumentException("É necessário informar a nova senha.");
 
+            if (obj.NovaSenha.Length < 6)
+                throw new ArgumentException("A nova senha deve ter no mínimo 6 caracteres.");
+
             var login = _repositoryLogin.ConsultarLoginPelaGuidVerificacao(obj.GuidVerificacao);
 
             if (login == null)
@@ -122,6 +125,27 @@ namespace AguaNoSertao.Domain.Services
 
             login.Senha = obj.NovaSenha;
             login.GuidVerificacao = null;
+
+            _repositoryLogin.Update(login);
+        }
+
+        public void AlterarSenha(AlterarSenha obj)
+        {
+            if (string.IsNullOrEmpty(obj.AntigaSenha))
+                throw new ArgumentException("É necessário informar a antiga senha.");
+
+            if (string.IsNullOrEmpty(obj.NovaSenha))
+                throw new ArgumentException("É necessário informar a nova senha.");
+
+            if (obj.NovaSenha.Length < 6)
+                throw new ArgumentException("A nova senha deve ter no mínimo 6 caracteres.");
+
+            var login = _repositoryLogin.GetById(IdLogin);
+
+            if (login.Senha != obj.AntigaSenha)
+                throw new ArgumentException("A senha atual está incorreta.");
+
+            login.Senha = obj.NovaSenha;
 
             _repositoryLogin.Update(login);
         }
